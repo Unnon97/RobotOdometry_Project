@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from src.feature_extraction import siftfeature, plottrajectory_vo
+from src.trajectory_vis import siftfeature, plottrajectory_vo
 
 try:
     config_path = '/home/dheeraj/unnon97/carMotion_project/config/main.yaml'
