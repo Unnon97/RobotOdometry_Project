@@ -1,0 +1,18 @@
+#######
+# This yaml file can be used as a configuration provider for easier parameter changes.
+
+# Author: Dheeraj Singh
+# Email: dheeraj.singh@rwth-aachen.de, singh97.dheeraj@gmail.com
+########
+
+# Parameters used for handling different components of the project
+
+datadirectory: "/home/dheeraj/unnon97/carMotion_project/data/kitti_dataset/training/"
+projectdirectory: "/home/dheeraj/unnon97/carMotion_project/config/"
+datafolder: "0000"
+display: all # step or all ( To display trajectory every step or at end)
+K:
+  fx: 7.215377000000e+02 
+  fy: 7.215377000000e+02 
+  cx: 6.095593000000e+02 
+  cy: 1.728540000000e+02 
