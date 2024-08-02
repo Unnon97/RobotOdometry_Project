@@ -14,17 +14,25 @@ try:
 except FileNotFoundError:
     print("File not found. Check the path variable and filename")
     exit()
-
-
-datadir = config["datadirectory"]
+    
 projectdir = config["projectdirectory"]
+
+datadir = config["kittidatadirectory"]
+images_directory = datadir + config["imgdirectory"]
+inertial_directory = datadir + config["inertialdirectory"]
+calib_directory = datadir + config["calibdirectory"]
+
 trajec_display = config["display"]
+
+datasource = config["datasource"]
+
 fx = config["K"]["fx"] 
 fy = config["K"]["fy"] 
 cx = config["K"]["cx"]
 cy = config["K"]["cy"]
 R_cumulative = np.eye(3)
 t_cumulative = np.zeros((3, 1))
+
 
 def plottrajectory_vo(trajectory):
     
