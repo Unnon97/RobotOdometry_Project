@@ -7,9 +7,12 @@
 
 # Parameters used for handling different components of the project
 
-datadirectory: "/home/dheeraj/unnon97/carMotion_project/data/kitti_dataset/training/"
-projectdirectory: "/home/dheeraj/unnon97/carMotion_project/config/"
-datafolder: "0000"
+kittidatadirectory: "/home/dheeraj/unnon97/carMotion_project/data/kitti_dataset/"
+imgdirectory: "data_tracking_imgs/training/"
+calibdirectory: "data_tracking_calib/training/"
+inertialdirectory: "data_tracking_oxts/training/"
+projectdirectory: "/home/dheeraj/unnon97/carMotion_project/"
+datasource: "0000/" # 0000/ or 0001/ .... or all
 display: all # step or all ( To display trajectory every step or at end)
 K:
   fx: 7.215377000000e+02 

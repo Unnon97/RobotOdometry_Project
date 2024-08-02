@@ -16,9 +16,18 @@ except FileNotFoundError:
     exit()
 
 
-datadir = config["datadirectory"]
+
 projectdir = config["projectdirectory"]
+
+datadir = config["kittidatadirectory"]
+images_directory = datadir + config["imgdirectory"]
+inertial_directory = datadir + config["inertialdirectory"]
+calib_directory = datadir + config["calibdirectory"]
+
 trajec_display = config["display"]
+
+datasource = config["datasource"]
+
 fx = config["K"]["fx"] 
 fy = config["K"]["fy"] 
 cx = config["K"]["cx"]
@@ -40,6 +49,7 @@ def plottrajectory_vo(trajectory):
     plt.xlabel('X')
     plt.ylabel('Z')
     plt.grid()
+    plt.savefig(projectdir+"output_images/trajectory.png")
     plt.show()
 
 def siftfeature(previous_frame, current_frame):
@@ -91,7 +101,6 @@ def siftfeature(previous_frame, current_frame):
     return R_cumulative, t_cumulative
 
 def main():
-
     trajectory = []
     img_dirs = os.listdir(datadir)
     img_dirs = os.listdir(datadir)
