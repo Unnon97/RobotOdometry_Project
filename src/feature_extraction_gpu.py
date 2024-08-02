@@ -4,8 +4,11 @@ import cv2
 import yaml
 import numpy as np
 import matplotlib.pyplot as plt
+import torch
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# device = "cuda" if 
 
 try:
     config_path = '/home/dheeraj/unnon97/carMotion_project/config/main.yaml'
@@ -19,6 +22,7 @@ except FileNotFoundError:
 datadir = config["datadirectory"]
 projectdir = config["projectdirectory"]
 trajec_display = config["display"]
+
 fx = config["K"]["fx"] 
 fy = config["K"]["fy"] 
 cx = config["K"]["cx"]
@@ -29,6 +33,7 @@ t_cumulative = np.zeros((3, 1))
 def plottrajectory_vo(trajectory):
     
     trajectory = np.array(trajectory).squeeze()
+    print("trja",trajectory)
     x_coords = trajectory[:, 0]
     y_coords = -trajectory[:, 1]
     z_coords = -trajectory[:, 2]
@@ -40,7 +45,6 @@ def plottrajectory_vo(trajectory):
     plt.xlabel('X')
     plt.ylabel('Z')
     plt.grid()
-    plt.savefig(projectdir+"output_images/trajectory.png")
     plt.show()
 
 def siftfeature(previous_frame, current_frame):
@@ -52,15 +56,12 @@ def siftfeature(previous_frame, current_frame):
 
     keypoints_previous, descriptor_previous = sift.detectAndCompute(gray_previous_frame, None)
     keypoints_current, descriptor_current = sift.detectAndCompute(gray_current_frame, None)
-    
+
+    descriptor_previous = descriptor_previous.download()
+    descriptor_current = descriptor_current.download()
+
     keypoint_previous_image = cv2.drawKeypoints(previous_frame, keypoints_previous, None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     keypoint_current_image = cv2.drawKeypoints(current_frame, keypoints_current, None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-
-    # cv2.imshow("SIFT Features on previous image",keypoint_previous_image)
-    # cv2.waitKey(0)
-    # cv2.imshow("SIFT Features on current image",keypoint_current_image)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
 
     ## Brute Force Matcher
     # bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
@@ -79,13 +80,15 @@ def siftfeature(previous_frame, current_frame):
 
     pointsInPrev = np.float32([keypoints_previous[m.queryIdx].pt for m in matches])
     pointsInCurr = np.float32([keypoints_current[m.trainIdx].pt for m in matches])
+    pointsInPrev_tensor = torch.tensor(pointsInPrev, dtype=torch.float32, device='cuda')
+    pointsInCurr_tensor = torch.tensor(pointsInCurr, dtype=torch.float32, device='cuda')
 
     K = np.array([[fx, 0, cx],
                 [0, fy, cy],
                 [0, 0, 1]])
     
-    E, mask = cv2.findEssentialMat(pointsInPrev, pointsInCurr, K, method=cv2.RANSAC, prob=0.999, threshold=1.0)
-    _, R, t, mask = cv2.recoverPose(E, pointsInPrev, pointsInCurr, K)
+    E, mask = cv2.findEssentialMat(pointsInPrev_tensor, pointsInCurr_tensor, K, method=cv2.RANSAC, prob=0.999, threshold=1.0)
+    _, R, t, mask = cv2.recoverPose(E, pointsInPrev_tensor, pointsInCurr_tensor, K)
 
     R_cumulative = R.dot(R_cumulative)
     t_cumulative += R_cumulative.dot(t)
@@ -106,14 +109,27 @@ def main():
             current_imagepath = os.path.join(datadir+dirs,str(imgcounts[id+1]))
             previous_image = cv2.imread(previous_imagepath, cv2.IMREAD_COLOR)
             current_image = cv2.imread(current_imagepath, cv2.IMREAD_COLOR)
+            gpu_previous_frame = cv2.cuda_GpuMat()
+            gpu_current_frame = cv2.cuda_GpuMat()
+            gpu_previous_frame.upload(previous_image)
+            gpu_current_frame.upload(current_image)
 
-            R_cumulative, t_cumulative = siftfeature(previous_image,current_image)
+            R_cumulative, t_cumulative = siftfeature(gpu_previous_frame,gpu_current_frame)
             trajectory.append(t_cumulative.copy())
             if trajec_display == "step" and id > 0:
                 plottrajectory_vo(trajectory)
         
         plottrajectory_vo(trajectory)
         
+
+        # x, y = zip(*trajectory)
+        # plt.plot(x, y, marker='o')
+        # plt.xlabel('X')
+        # plt.ylabel('Z')
+        # plt.title('Camera Trajectory')
+        # plt.show()
+        # break
+
 
 if __name__ == "__main__":
     main()

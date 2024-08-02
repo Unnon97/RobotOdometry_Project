@@ -1,3 +1,2 @@
 *.pth
 data/*
-*_gpu.py
