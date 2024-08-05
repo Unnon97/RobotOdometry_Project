@@ -6,7 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from src.trajectory_vis import siftfeature, plottrajectory_vo
+from src.trajectory_vis import *
+from src.trajectory_imu import *
 
 try:
     config_path = '/home/dheeraj/unnon97/carMotion_project/config/main.yaml'
@@ -26,6 +27,15 @@ calib_directory = datadir + config["calibdirectory"]
 trajec_display = config["display"]
 
 datasource = config["datasource"]
+
+def readdata(datadir):
+    datadict = {}
+    read_imu_data
+    readimages
+
+    return datadict
+
+
 
 def main():
     trajectory = []
