@@ -14,9 +14,7 @@ try:
 except FileNotFoundError:
     print("File not found. Check the path variable and filename")
     exit()
-
-
-
+    
 projectdir = config["projectdirectory"]
 
 datadir = config["kittidatadirectory"]
@@ -35,16 +33,22 @@ cy = config["K"]["cy"]
 R_cumulative = np.eye(3)
 t_cumulative = np.zeros((3, 1))
 
-def plottrajectory_vo(trajectory):
-    
+
+def readimages(imagedir,imagecount, id):
+    previous_imagepath = os.path.join(imagedir,str(imagecount[id]))
+    current_imagepath = os.path.join(imagedir,str(imagecount[id+1]))
+    previous_image = cv2.imread(previous_imagepath, cv2.IMREAD_COLOR)[160:,:,:]
+    current_image = cv2.imread(current_imagepath, cv2.IMREAD_COLOR)[160:,:,:]
+    # print("SHAPE",previous_image.shape)
+    return previous_image, current_image
+
+def plottrajectory_vis(trajectory):
     trajectory = np.array(trajectory).squeeze()
     x_coords = trajectory[:, 0]
     y_coords = -trajectory[:, 1]
     z_coords = -trajectory[:, 2]
-
-    # Plot the trajectory
     plt.figure()
-    plt.plot(x_coords, z_coords, marker='o')  # 2D plot for simplicity
+    plt.plot(x_coords, z_coords, marker='o')
     plt.title('Camera Trajectory')
     plt.xlabel('X')
     plt.ylabel('Z')
@@ -102,25 +106,21 @@ def siftfeature(previous_frame, current_frame):
 
 def main():
     trajectory = []
-    img_dirs = os.listdir(datadir)
-    img_dirs = os.listdir(datadir)
+    img_dirs = os.listdir(images_directory)
     img_dirs = sorted(img_dirs)
     for dirs in img_dirs:
         print()
-        imgcounts = os.listdir(datadir+dirs)
+        imgcounts = os.listdir(images_directory+dirs)
         imgcounts = np.sort(imgcounts)
+        print("DADA",images_directory+dirs)
         for id,img in enumerate(imgcounts[1:]):
-            previous_imagepath = os.path.join(datadir+dirs,str(imgcounts[id]))
-            current_imagepath = os.path.join(datadir+dirs,str(imgcounts[id+1]))
-            previous_image = cv2.imread(previous_imagepath, cv2.IMREAD_COLOR)
-            current_image = cv2.imread(current_imagepath, cv2.IMREAD_COLOR)
-
-            R_cumulative, t_cumulative = siftfeature(previous_image,current_image)
+            previous_image,current_image = readimages(images_directory+dirs,imgcounts, id)
+            R_cumulative, t_cumulative = siftfeature(previous_image, current_image)
             trajectory.append(t_cumulative.copy())
             if trajec_display == "step" and id > 0:
-                plottrajectory_vo(trajectory)
+                plottrajectory_vis(trajectory)
         
-        plottrajectory_vo(trajectory)
+        plottrajectory_vis(trajectory)
         
 
 if __name__ == "__main__":
