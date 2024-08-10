@@ -1,7 +1,5 @@
 # Robot Motion Project
 This project contains scripts that utilise KITTI dataset image frames to track the robot throughout the motion using classical computer vision systems.
-# Robot Motion Project
-This project contains scripts that utilise KITTI dataset image frames to track the robot throughout the motion using classical computer vision systems.
 
 ## Topics worked upon in this project
 1. Ego-Motion tracking using features
