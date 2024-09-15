@@ -19,7 +19,8 @@ except FileNotFoundError:
 
 projectdir = config["projectdirectory"]
 
-datadir = config["kittidatadirectory"]
+datadir = config["datadirectory"]
+kittidatadir = datadir + "kitti_dataset/"
 images_directory = datadir + config["imgdirectory"]
 inertial_directory = datadir + config["inertialdirectory"]
 calib_directory = datadir + config["calibdirectory"]

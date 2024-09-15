@@ -7,7 +7,8 @@
 
 # Parameters used for handling different components of the project
 
-kittidatadirectory: "/home/dheeraj/unnon97/carMotion_project/data/kitti_dataset/"
+datadirectory: "/home/dheeraj/unnon97/carMotion_project/data/"
+
 imgdirectory: "data_tracking_imgs/training/"
 calibdirectory: "data_tracking_calib/training/"
 inertialdirectory: "data_tracking_oxts/training/"
