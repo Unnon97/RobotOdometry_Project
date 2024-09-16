@@ -78,7 +78,6 @@ int main(int argc, char** argv)
         }
     }
 
-    // Draw the matches
     Mat img_match;
     Mat img_goodmatch;
     drawMatches(img_1, keypoints_1, img_2, keypoints_2, matches, img_match);

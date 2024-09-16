@@ -129,6 +129,19 @@ orb_feature/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/orb_feature.dir/build.make CMakeFiles/orb_feature.dir/build
 .PHONY : orb_feature/fast
 
+#=============================================================================
+# Target rules for targets named trajectory
+
+# Build rule for target.
+trajectory: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 trajectory
+.PHONY : trajectory
+
+# fast build rule for target.
+trajectory/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trajectory.dir/build.make CMakeFiles/trajectory.dir/build
+.PHONY : trajectory/fast
+
 src/orb_featurematch.o: src/orb_featurematch.cpp.o
 .PHONY : src/orb_featurematch.o
 
@@ -153,6 +166,30 @@ src/orb_featurematch.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/orb_feature.dir/build.make CMakeFiles/orb_feature.dir/src/orb_featurematch.cpp.s
 .PHONY : src/orb_featurematch.cpp.s
 
+src/trajectory.o: src/trajectory.cpp.o
+.PHONY : src/trajectory.o
+
+# target to build an object file
+src/trajectory.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trajectory.dir/build.make CMakeFiles/trajectory.dir/src/trajectory.cpp.o
+.PHONY : src/trajectory.cpp.o
+
+src/trajectory.i: src/trajectory.cpp.i
+.PHONY : src/trajectory.i
+
+# target to preprocess a source file
+src/trajectory.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trajectory.dir/build.make CMakeFiles/trajectory.dir/src/trajectory.cpp.i
+.PHONY : src/trajectory.cpp.i
+
+src/trajectory.s: src/trajectory.cpp.s
+.PHONY : src/trajectory.s
+
+# target to generate assembly for a file
+src/trajectory.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trajectory.dir/build.make CMakeFiles/trajectory.dir/src/trajectory.cpp.s
+.PHONY : src/trajectory.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -162,9 +199,13 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... orb_feature"
+	@echo "... trajectory"
 	@echo "... src/orb_featurematch.o"
 	@echo "... src/orb_featurematch.i"
 	@echo "... src/orb_featurematch.s"
+	@echo "... src/trajectory.o"
+	@echo "... src/trajectory.i"
+	@echo "... src/trajectory.s"
 .PHONY : help
 
 
